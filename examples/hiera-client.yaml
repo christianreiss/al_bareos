@@ -1,0 +1,13 @@
+---
+al_bareos::client::pw_storage: ENC[PKCS7,MIIBuQYJKoZIhvcNAQntV7RIYM2/XkxycQ==]
+al_bareos::server::pw_storage: ENC[PKCS7,MIIBuQYJKoZIhvcNAQftV7RIYM2/XkxycQ==]
+al_bareos::client::director: 'your.bareos.server.fqdn'
+al_bareos::client::sd_ip: '10.1.0.150'
+al_bareos::client::monitoring: true
+al_bareos::server::monitoring_server: '10.1.0.150'
+al_bareos::client::exclude:
+  - '/dontbackup/this'
+al_bareos::client::incude:
+  - '/backup/this'
+classes:
+  - 'al_bareos::client'

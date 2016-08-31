@@ -1,0 +1,26 @@
+# This file is managed by
+#  ____  _   _ ____  ____  _____ _____
+# |  _ \| | | |  _ \|  _ \| ____|_   _|
+# | |_) | | | | |_) | |_) |  _|   | |
+# |  __/| |_| |  __/|  __/| |___  | |
+# |_|    \___/|_|   |_|   |_____| |_|
+#
+#      All changes will be overwritten
+
+#
+# Bacula Console Agent
+#
+
+Director {
+   Name     = "<%= scope.lookupvar('::al_bareos::client::director')%>-dir"
+   DIRport  = 9101
+   Address  = "<%= scope.lookupvar('::al_bareos::client::director')%>"
+   Password = "XXXXXXXXXXX"    # no, really. This is *not* obfuscation.
+}
+
+Console {
+  Name      = "<%=@fqdn%>-console"
+  Password  = "<%= scope.lookupvar('::al_bareos::client::pw_console')%>"
+  Director  = "<%= scope.lookupvar('::al_bareos::client::director')%>"
+}
+

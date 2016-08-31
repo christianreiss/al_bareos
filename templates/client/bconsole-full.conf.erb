@@ -1,0 +1,20 @@
+# This file is managed by
+#  ____  _   _ ____  ____  _____ _____
+# |  _ \| | | |  _ \|  _ \| ____|_   _|
+# | |_) | | | | |_) | |_) |  _|   | |
+# |  __/| |_| |  __/|  __/| |___  | |
+# |_|    \___/|_|   |_|   |_____| |_|
+#
+#      All changes will be overwritten
+
+#
+# Bacula User Agent (or Console) Configuration File
+#
+
+Director {
+  Name     = <%=@hostname%>-dir
+  DIRport  = 9101
+  address  = <%=@fqdn%>
+  Password = "<%= scope.lookupvar('::al_bareos::client::pw_director') %>"
+}
+

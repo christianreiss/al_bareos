@@ -1,0 +1,20 @@
+# This file is managed by
+#  ____  _   _ ____  ____  _____ _____
+# |  _ \| | | |  _ \|  _ \| ____|_   _|
+# | |_) | | | | |_) | |_) |  _|   | |
+# |  __/| |_| |  __/|  __/| |___  | |
+# |_|    \___/|_|   |_|   |_____| |_|
+#
+#      All changes will be overwritten
+
+Client {
+  Name           = <%=@fqdn%>-fd
+  Address        = <%= scope.lookupvar('::al_bareos::client::ip') %>
+  FDPort         = 9102
+  Catalog        = MySQL
+  Password       = "<%= scope.lookupvar('::al_bareos::client::pw_client')%>"
+  File Retention = 90 days
+  Job Retention  = 90 days
+  AutoPrune      = yes
+}
+

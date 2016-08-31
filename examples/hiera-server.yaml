@@ -1,0 +1,20 @@
+---
+# Load the bareos server component
+classes:
+  - 'bareos::server'
+
+# Exclude it's storage sd dir from backing up
+al_bareos::client::exclude:
+  - '/bareos'
+
+# Set passwords.
+
+# MySQL Password.
+al_bareos::server::pw_mysql: ENC[PKCS7,MIIBuQNDjhfYXX...WC2RwEqNZR6A==]
+
+# Director Password. Must be identifal to client.
+al_bareos::server::pw_director: ENC[PKCS7,MIIB40Mnhz...JZoXY08bF+W7A==]
+
+# Storage password. Must be identical to client.
+al_bareos::server::pw_storage: ENC[PKCS7,MIIBuQYJKo.CAQAx..../XkxycQ==]
+

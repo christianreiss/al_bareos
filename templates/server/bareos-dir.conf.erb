@@ -1,0 +1,73 @@
+# This file is managed by
+#  ____  _   _ ____  ____  _____ _____
+# |  _ \| | | |  _ \|  _ \| ____|_   _|
+# | |_) | | | | |_) | |_) |  _|   | |
+# |  __/| |_| |  __/|  __/| |___  | |
+# |_|    \___/|_|   |_|   |_____| |_|
+#
+#      All changes will be overwritten
+
+
+# Main Director Definition
+########################################################################
+Director {
+  Name                    = <%=@fqdn%>-dir
+  Description             = "Director at <%=@fqdn%>."
+  password                = "<%= scope.lookupvar('::al_bareos::server::pw_director') %>"
+  QueryFile               = "/usr/lib/bareos/scripts/query.sql"
+  Messages                = Daemon
+  FD Connect Timeout      = 15
+  SD Connect Timeout      = 15
+  Maximum Concurrent Jobs = <%= scope.lookupvar('::al_bareos::server::max_con_jobs') %>
+}
+
+# Storage
+########################################################################
+Storage {
+  Name       = File
+  Address    = "<%= scope.lookupvar('::al_bareos::server::ip') %>"
+  SDPort     = 9103
+  Password   = "<%= scope.lookupvar('::al_bareos::server::pw_storage') %>"
+  Device     = FileStorage
+  Media Type = File
+}
+
+# Catalogues
+########################################################################
+Catalog {
+  Name     = MySQL
+  dbname   = "<%= scope.lookupvar('::al_bareos::server::db_name') %>"
+  user     = "<%= scope.lookupvar('::al_bareos::server::db_user') %>"
+  password = "<%= scope.lookupvar('::al_bareos::server::pw_mysql') %>"
+  dbdriver = "mysql"
+}
+
+# Messages
+########################################################################
+Messages {
+  Name            = Standard
+  mailcommand     = "/usr/sbin/bsmtp -h <%= scope.lookupvar('::al_bareos::server::mail_relay') %> -f \"\(Bareos\) %r\" -s \"Bareos: %t %e of %c %l\" %r"
+  operatorcommand = "/usr/sbin/bsmtp -h <%= scope.lookupvar('::al_bareos::server::mail_relay') %> -f \"\(Bareos\) %r\" -s \"Bareos: Aiieeee for %j\" %r"
+  mail            = <%= scope.lookupvar('::al_bareos::server::email') %> = error, !skipped, !restored, !saved, !notsaved
+  operator        = <%= scope.lookupvar('::al_bareos::server::email') %> = mount
+  console         = error, !skipped, !saved, !restored
+  syslog          = all
+}
+
+Messages {
+  Name    = Daemon
+  console = all, !skipped, !saved
+  syslog  = all, !skipped, !saved
+}
+
+# Load exported client configurations
+##########################################################################
+@|"sh -c 'for f in /etc/bareos/clients.d/*.conf   ; do echo @${f} ; done'"
+@|"sh -c 'for f in /etc/bareos/filesets.d/*.conf  ; do echo @${f} ; done'"
+@|"sh -c 'for f in /etc/bareos/jobs.d/*.conf      ; do echo @${f} ; done'"
+@|"sh -c 'for f in /etc/bareos/pools.d/*.conf     ; do echo @${f} ; done'"
+@|"sh -c 'for f in /etc/bareos/schedules.d/*.conf ; do echo @${f} ; done'"
+@|"sh -c 'for f in /etc/bareos/storage.d/*.conf   ; do echo @${f} ; done'"
+@|"sh -c 'for f in /etc/bareos/consoles.d/*.conf  ; do echo @${f} ; done'"
+@|"sh -c 'for f in /etc/bareos/messages.d/*.conf  ; do echo @${f} ; done'"
+

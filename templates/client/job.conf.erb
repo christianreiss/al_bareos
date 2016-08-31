@@ -1,0 +1,62 @@
+# This file is managed by
+#  ____  _   _ ____  ____  _____ _____
+# |  _ \| | | |  _ \|  _ \| ____|_   _|
+# | |_) | | | | |_) | |_) |  _|   | |
+# |  __/| |_| |  __/|  __/| |___  | |
+# |_|    \___/|_|   |_|   |_____| |_|
+#
+#      All changes will be overwritten
+
+
+#
+# Backup Job Definition for <%=@fqdn%>.
+#
+Job {
+  Name                     = "<%=@fqdn%> - backup"
+  Enabled                  = yes
+  FileSet                  = "<%=@fqdn%>"
+  Level                    = Incremental
+  Max Start Delay          = 2700
+  Maximum Concurrent Jobs  = 1
+  Rerun Failed Levels      = no
+  Reschedule On Error      = no
+  Allow Duplicate Jobs     = no
+  Allow Mixed Priority     = yes
+  Priority                 = 50
+  Prune Files              = yes
+  Prune Volumes            = yes
+  Prune Jobs               = yes
+  Accurate                 = <%= scope.lookupvar('::al_bareos::client::accurate')%>
+  Schedule                 = "<%=@fqdn%>"
+  Write Bootstrap          = "<%= scope.lookupvar('::al_bareos::client::bootstrap')%>/<%=@fqdn%>.bsr"
+  client                   = "<%=@fqdn%>-fd"
+  messages                 = "<%=@fqdn%>-messages"
+  pool                     = "<%=@fqdn%>-hourly"
+  Full Backup Pool         = "<%=@fqdn%>-monthly"
+  Differential Backup Pool = "<%=@fqdn%>-daily"
+  Incremental Backup Pool  = "<%=@fqdn%>-hourly"
+  Max Full Interval        = 31 days
+  storage                  = "storage-<%=@fqdn%>"
+  type                     = backup
+<% if scope.lookupvar('::al_bareos::client::monitoring')%>  Run After Job            = "/etc/bareos/bin/notifyMonitoring.sh %c %e"
+  Run After Failed Job     = "/etc/bareos/bin/notifyMonitoring.sh %c %e" 
+<% end -%>
+}
+
+#
+# Restore Job Definition for <%=@fqdn%>.
+#
+Job {
+  Name      = "<%=@fqdn%> - restore"
+  Bootstrap = "<%= scope.lookupvar('::al_bareos::client::bootstrap')%>/<%=@fqdn%>.bsr"
+  FileSet   = "<%=@fqdn%>"
+  Messages  = "<%=@fqdn%>-messages"
+  Pool      = "<%=@fqdn%>-hourly"
+  Replace   = Always
+  storage   = "storage-<%=@fqdn%>"
+  Type      = Restore
+  Priority  = 10
+  Where     = /bareos-restores
+  client    = "<%=@fqdn%>-fd"
+}
+
