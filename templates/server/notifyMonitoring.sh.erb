@@ -90,10 +90,10 @@ if [ "${EXIT}" == "OK" ] ; then
     # OK exit: Send just that.
     if [ "${PASSED}" -le 60 ]; then
         # Backup took less than 60 Minutes. Good.
-        /bin/echo "${HN};bareos: backup;0;Backup completed in ${PASSED} Minutes. :) (`date +%H:%M:%S`)" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';' >/dev/null
+        /bin/echo "${HN};bareos: backup;0;Backup completed in ${PASSED} Minutes. :)" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';' >/dev/null
     else
         # Backup took more than 360 Minutes. Bad.
-        /bin/echo "${HN};bareos: backup;0;Backup completed, but in ${PASSED} Minutes :/ (`date +%H:%M:%S`)" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';' >/dev/null
+        /bin/echo "${HN};bareos: backup;0;Backup completed, but in ${PASSED} Minutes :/" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';' >/dev/null
     fi
 else
     # Everything else: PANIC!
