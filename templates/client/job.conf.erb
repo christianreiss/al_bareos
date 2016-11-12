@@ -38,6 +38,7 @@ Job {
   Max Full Interval        = 31 days
   storage                  = "storage-<%=@fqdn%>"
   type                     = backup
+  Run Before Job           = "/etc/bacula/bin/notifyMonitoring.sh %c START"
   Run After Job            = "/etc/bareos/bin/notifyMonitoring.sh %c %e"
   Run After Failed Job     = "/etc/bareos/bin/notifyMonitoring.sh %c %e"
 }
@@ -58,4 +59,3 @@ Job {
   Where     = /bareos-restores
   client    = "<%=@fqdn%>-fd"
 }
-
