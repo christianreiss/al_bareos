@@ -73,16 +73,16 @@ fi
 #
 LastFull="`/usr/bin/php /etc/bacula/bin/getLastFull.php ${HN}`"
 if [ "${LastFull}" == "OK" ] ; then
-        /bin/echo "${HN};bacula:_full_backup;0;full backup OK." | /usr/sbin/send_nsca -H <%= scope.lookupvar('::pn_bacula::monitoring_server')%> -c /etc/nagios/send_nsca.cfg -d ';' >/dev/null
+        /bin/echo "${HN};bareos: full backup;0;full backup OK." | /usr/sbin/send_nsca -H <%= scope.lookupvar('::al_bareos::monitoring_server')%> -c /etc/nagios/send_nsca.cfg -d ';' >/dev/null
 else
-        /bin/echo "${HN};bacula:_full_backup;2;No full backup within 30 days found!" | /usr/sbin/send_nsca -H <%= scope.lookupvar('::pn_bacula::monitoring_server')%> -c /etc/nagios/send_nsca.cfg -d ';' >/dev/null
+        /bin/echo "${HN};bareos: full backup;2;No full backup within 30 days found!" | /usr/sbin/send_nsca -H <%= scope.lookupvar('::al_bareos::monitoring_server')%> -c /etc/nagios/send_nsca.cfg -d ';' >/dev/null
 fi
 
 
 if [ "${EXIT}" == "OK" ] ; then
-    /bin/echo "${HN};bareos: backup;0;Backup completed (`date +%H:%M:%S`)" | /usr/sbin/send_nsca -H <%= scope.lookupvar('::icinga::client::monitoring_server')%> -c <%= scope.lookupvar('::icinga::client::send_nsca_config')%> -d ';'
+    /bin/echo "${HN};bareos: backup;0;Backup completed (`date +%H:%M:%S`)" | /usr/sbin/send_nsca -H <%= scope.lookupvar('::al_bareos::monitoring_server')%> -c <%= scope.lookupvar('::icinga::client::send_nsca_config')%> -d ';'
 else
-    /bin/echo "${HN};bareos: backup;2;Backup failed @ `date +%H:%M:%S` with ${EXIT}!" | /usr/sbin/send_nsca -H <%= scope.lookupvar('::icinga::client::monitoring_server')%> -c <%= scope.lookupvar('::icinga::client::send_nsca_config')%> -d ';'
+    /bin/echo "${HN};bareos: backup;2;Backup failed @ `date +%H:%M:%S` with ${EXIT}!" | /usr/sbin/send_nsca -H <%= scope.lookupvar('::al_bareos::monitoring_server')%> -c <%= scope.lookupvar('::icinga::client::send_nsca_config')%> -d ';'
 fi
 
 

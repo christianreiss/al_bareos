@@ -5,6 +5,13 @@ class al_bareos::client::monitoring {
       if ($::al_bareos::client::monitoring) {
 
         #
+        # Bail if we dont have a target.
+        #
+        if (! $::al_bareos::client::monitoring_server) {
+          fail ('Monitoring requested, but no monitoring_server specified!')
+        }
+
+        #
         # Defaults.
         #
         Nagios_service {

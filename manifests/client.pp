@@ -29,6 +29,7 @@
 # $include     = hiera array of things to include (defaults to /).
 # $exclude     = hiera array of things to exclude (defaults to none).
 # $monitoring  = (bool) If nagios monitoring should be exported.
+# $monitoring_server = (fqdn) of your monitoring server to send nsca events too.
 #
 # Examples
 # --------
@@ -69,6 +70,7 @@ class al_bareos::client (
   $pw_storage  = false,
   $accurate    = true,
   $monitoring  = true,
+  $monitoring_server = $icinga::client::server_ip,
   $onefs       = 'yes',
   $include     = 'unset',
   $exclude     = 'unset',
