@@ -28,6 +28,8 @@
 # $mail_relay       = IP for the mail relay server (localhost)
 # $pw_webui_console = Password for the web-interface
 # $webui_vhost      = vhost for th web-interface, defaults to fqdn
+# $monitoring  = (bool) If nagios monitoring should be exported.
+# $monitoring_server = (fqdn) of your monitoring server to send nsca events too.
 #
 #
 # Examples
@@ -59,21 +61,23 @@
 
 class al_bareos::server (
 
-  $enable           = true,
-  $director         = $::fqdn,
-  $ip               = $::al_ip::ip_int,
-  $storagepath      = '/bareos/storage',
-  $bootpath         = '/bareos/bootstraps',
-  $logdir           = '/var/log/bareos',
-  $zfs_pool         = 'bareos',
-  $pw_director      = false,
-  $pw_storage       = false,
-  $pw_mysql         = false,
-  $mail_relay       = '127.0.0.1',
-  $db_user          = 'bareos',
-  $db_name          = 'bareos',
-  $pw_webui_console = fqdn_rand_string('64', '', 'bareos-webui-password'),
-  $webui_vhost      = $::fqdn,
+  $enable            = true,
+  $director          = $::fqdn,
+  $ip                = $::al_ip::ip_int,
+  $storagepath       = '/bareos/storage',
+  $bootpath          = '/bareos/bootstraps',
+  $logdir            = '/var/log/bareos',
+  $zfs_pool          = 'bareos',
+  $pw_director       = false,
+  $pw_storage        = false,
+  $pw_mysql          = false,
+  $mail_relay        = '127.0.0.1',
+  $db_user           = 'bareos',
+  $db_name           = 'bareos',
+  $pw_webui_console  = fqdn_rand_string('64', '', 'bareos-webui-password'),
+  $webui_vhost       = $::fqdn,
+  $monitoring        = true,
+  $monitoring_server = $icinga::client::server_ip,
 
 ) inherits al_bareos::server::params {
 
