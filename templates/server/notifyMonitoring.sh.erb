@@ -87,9 +87,17 @@ fi
 # Send the result of the current run to the monitoring server.
 #
 if [ "${EXIT}" == "OK" ] ; then
-    /bin/echo "${HN};bareos: backup;0;Backup completed (`date +%H:%M:%S`)" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';'
+    # OK exit: Send just that.
+    if [ "${PASSED}" -le 60 ]; then
+        # Backup took less than 60 Minutes. Good.
+        /bin/echo "${HN};bareos: last backup;0;Backup completed in ${PASSED} Minutes. :) (`date +%H:%M:%S`)" | /usr/sbin/send_nsca -H ${MONITORING_SERVER}-c ${NRPE_CONFIG} -d ';' >/dev/null
+    else
+        # Backup took more than 360 Minutes. Bad.
+        /bin/echo "${HN};bareos: last backup;0;Backup completed, but in ${PASSED} Minutes :/ (`date +%H:%M:%S`)" | /usr/sbin/send_nsca -H ${MONITORING_SERVER}-c ${NRPE_CONFIG} -d ';' >/dev/null
+    fi
 else
-    /bin/echo "${HN};bareos: backup;2;Backup failed @ `date +%H:%M:%S` with ${EXIT}!" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';'
+    # Everything else: PANIC!
+    /bin/echo "${HN};bareos: last backup;2;Backup failed after ${PASSED} Minutes at `date +%H:%M:%S` with ${EXIT}! :(" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';' >/dev/null
 fi
 
 
