@@ -45,7 +45,6 @@ class al_bareos::client::monitoring {
         #
         @@nagios_service { "${::fqdn}-bareos-restore-dir":
           check_command          => 'bareos-fail',
-          servicegroups          => 'bareos',
           display_name           => 'bareos: restore-dir',
           service_description    => 'bareos: restore-dir',
           initial_state          => 'o',
@@ -64,7 +63,6 @@ class al_bareos::client::monitoring {
         #
         @@nagios_service { "${::fqdn}-bareos-full":
           check_command          => 'bareos-fail',
-          servicegroups          => 'bareos',
           display_name           => 'bareos: full backup',
           service_description    => 'bareos: full backup',
           initial_state          => 'o',
