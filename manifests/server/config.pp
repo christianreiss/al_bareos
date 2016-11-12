@@ -35,7 +35,7 @@ class al_bareos::server::config (){
     require => [Class['al_bareos::server::install'],File['/etc/bareos']],
   }
 
-  file { '/etc/bacula/bin/getLastFull.php':
+  file { '/etc/bareos/bin/getLastFull.php':
     ensure  => file,
     owner   => 'bareos',
     group   => 'bareos',
