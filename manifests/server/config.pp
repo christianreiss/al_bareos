@@ -38,6 +38,7 @@ class al_bareos::server::config (){
   file { '/etc/bareos/bin/getLastFull.php':
     ensure  => file,
     owner   => 'bareos',
+    mode    => '0750',
     group   => 'bareos',
     content => template('al_bareos/server/getLastFull.php.erb'),
     require => File['/etc/bareos/bin'],
