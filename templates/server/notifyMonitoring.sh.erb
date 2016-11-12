@@ -66,8 +66,8 @@ fi
 # Clear Monitoring
 #
 if [ "$2" == "unstick" ] ; then
-    /bin/echo "${HN};bareos:_last_backup;0;Manually cleared @ `date +%H:%M:%S`" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';' >/dev/null
-    /bin/echo "${HN};bareos:_full_backup;0;Manually cleared @ `date +%H:%M:%S`" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';' >/dev/null
+    /bin/echo "${HN};bareos: backup;0;Manually cleared @ `date +%H:%M:%S`" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';' >/dev/null
+    /bin/echo "${HN};bareos: full backup;0;Manually cleared @ `date +%H:%M:%S`" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';' >/dev/null
     exit 0
 fi
 
@@ -90,14 +90,14 @@ if [ "${EXIT}" == "OK" ] ; then
     # OK exit: Send just that.
     if [ "${PASSED}" -le 60 ]; then
         # Backup took less than 60 Minutes. Good.
-        /bin/echo "${HN};bareos: last backup;0;Backup completed in ${PASSED} Minutes. :) (`date +%H:%M:%S`)" | /usr/sbin/send_nsca -H ${MONITORING_SERVER}-c ${NRPE_CONFIG} -d ';' >/dev/null
+        /bin/echo "${HN};bareos: backup;0;Backup completed in ${PASSED} Minutes. :) (`date +%H:%M:%S`)" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';' >/dev/null
     else
         # Backup took more than 360 Minutes. Bad.
-        /bin/echo "${HN};bareos: last backup;0;Backup completed, but in ${PASSED} Minutes :/ (`date +%H:%M:%S`)" | /usr/sbin/send_nsca -H ${MONITORING_SERVER}-c ${NRPE_CONFIG} -d ';' >/dev/null
+        /bin/echo "${HN};bareos: backup;0;Backup completed, but in ${PASSED} Minutes :/ (`date +%H:%M:%S`)" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';' >/dev/null
     fi
 else
     # Everything else: PANIC!
-    /bin/echo "${HN};bareos: last backup;2;Backup failed after ${PASSED} Minutes at `date +%H:%M:%S` with ${EXIT}! :(" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';' >/dev/null
+    /bin/echo "${HN};bareos: backup;2;Backup failed after ${PASSED} Minutes at `date +%H:%M:%S` with ${EXIT}! :(" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';' >/dev/null
 fi
 
 
