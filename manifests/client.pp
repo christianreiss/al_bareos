@@ -28,6 +28,7 @@
 # $onefs       = Should we stay on one filesystem, defaults to true.
 # $include     = hiera array of things to include (defaults to /).
 # $exclude     = hiera array of things to exclude (defaults to none).
+# $monitoring  = (bool) If nagios monitoring should be exported.
 #
 # Examples
 # --------
@@ -67,6 +68,7 @@ class al_bareos::client (
   $pw_director = false,
   $pw_storage  = false,
   $accurate    = true,
+  $monitoring  = true,
   $onefs       = 'yes',
   $include     = 'unset',
   $exclude     = 'unset',

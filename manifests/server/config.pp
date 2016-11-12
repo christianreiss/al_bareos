@@ -35,6 +35,14 @@ class al_bareos::server::config (){
     require => [Class['al_bareos::server::install'],File['/etc/bareos']],
   }
 
+  file { '/etc/bacula/bin/getLastFull.php':
+    ensure  => file,
+    owner   => 'bareos',
+    group   => 'bareos',
+    content => template('al_bareos/server/getLastFull.php.erb'),
+    require => File['/etc/bareos/bin'],
+  }
+
 # Cron for Bootstrap Cleanup
   cron { 'cleanup-bootstrap':
     ensure   => 'present',

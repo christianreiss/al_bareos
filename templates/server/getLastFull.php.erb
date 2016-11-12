@@ -1,0 +1,32 @@
+<?PHP
+
+// Set host variable from argument. For great niceificationing!
+$HOST=$argv[1];
+
+// Bail out if we do not have a host argument.
+if ( "$HOST" == "" ) {
+	print ( "\n\nUsage: getLastFull.php fqdn" );
+	die(1);
+}
+
+// Query BaculaDB
+$db_host    = "localhost";
+$db_user    = "<%= scope.lookupvar('::al_bareos::server::db_user') %>";
+$db_pass    = "<%= scope.lookupvar('::al_bareos::server::pw_mysql') %>";
+$db_name    = "<%= scope.lookupvar('::al_bareos::server::db_name') %>";
+$dbh        = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass, array(PDO::MYSQL_ATTR_FOUND_ROWS => true) ) ;
+$q = $dbh->query("SELECT RealEndTime FROM Job WHERE Level='F' AND Name='" .$HOST ." - backup' AND Type='B' AND JobStatus='T' ORDER BY RealEndTime DESC limit 1;");
+$fullbackup = $q->fetch(PDO::FETCH_ASSOC);
+
+// Create timestamps.
+$backupDone = strtotime($fullbackup['RealEndTime']);
+$now        = date("U");
+
+// If the backup is not stale, print ok, else error.
+if ( ($backupDone + 2764800) > $now ) {
+	echo ("OK");
+} else {
+	echo ("ERROR");
+}
+
+?>

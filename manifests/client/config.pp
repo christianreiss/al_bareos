@@ -17,6 +17,33 @@ class al_bareos::client::config (){
       require => Class['al_bareos::client::install'],
     }
 
+    if ($::al_bareos::client::monitoring) {
+    file { '/etc/bareos/check_bareosRestoreDir.sh':
+      ensure  => file,
+      mode    => '0750',
+      owner  => 'root',
+      group => 'root',
+      require => Class['al_bareos::client::install'],
+      content => template('al_bareos/client/check_bareosRestoreDir.sh.erb'),
+    }
+
+    cron { 'bareos-restore-dir-check':
+  command => '/etc/bareos/check_bareosRestoreDir.sh >/dev/null',
+  user    => 'root',
+  hour    => '*/3',
+  minute  => fqdn_rand(60,'bareos-restore-dir-check'),
+  require => File['/etc/bareos/check_bareosRestoreDir.sh'],
+}
+} else {
+file { '/etc/bareos/check_bareosRestoreDir.sh':
+  ensure  => absent,
+}
+
+cron { 'bareos-restore-dir-check':
+  ensure => absent,
+}
+}
+
     # bareos filedaemon
     file { '/etc/bareos/bareos-fd.conf':
       ensure  => file,

@@ -1,0 +1,18 @@
+#! /bin/bash
+
+# Our hostnmame
+HN="<%=@fqdn%>"
+
+# Directory we should / want to care about.
+DIR="/bareos-restores"
+
+# If the directory does not exists, quit happily.
+if [ ! -e ${DIR} ] ; then
+    /bin/echo "${HN};bareos: restore-dir;0;No ${DIR} dir found." | /usr/sbin/send_nsca -H <%= scope.lookupvar('::al_bareos::client::monitoring_server')%> -c /etc/nagios/send_nsca.cfg -d ';'
+    exit 0
+fi
+
+# It does exists, count it and exit. (Also inform the mayor.=
+USED="`/usr/bin/du -hs ${DIR} | awk ' { print $1 } '`"
+/bin/echo "${HN};bareos: restore-dir;1;${DIR} dir found, using ${USED}." | /usr/sbin/send_nsca -H <%= scope.lookupvar('::al_bareos::client::monitoring_server')%> -c /etc/nagios/send_nsca.cfg -d ';'
+exit 1

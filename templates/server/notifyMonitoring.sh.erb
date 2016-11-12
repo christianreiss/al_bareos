@@ -1,10 +1,92 @@
 #! /bin/bash
+#
+# This file is managed by
+#  ____  _   _ ____  ____  _____ _____
+# |  _ \| | | |  _ \|  _ \| ____|_   _|
+# | |_) | | | | |_) | |_) |  _|   | |
+# |  __/| |_| |  __/|  __/| |___  | |
+# |_|    \___/|_|   |_|   |_____| |_|
+#
+#      All changes will be overwritten
+#       Nagios Notification Serverside
 
+# Dumb Terminal Fix
+TERM=dumb
+export TERM
+
+# Hostname (HN) is being sent as argument from  bareos. So We set $1 to HN.
 HN="`echo $1 | awk -F\"-fd\" ' { print $1 } '`"
+
+# The Error code is the second argument.
 EXIT="$2"
+
+# JobID
+JOBID="$3"
+
+# TimeStamp Logfile
+TS="/tmp/${HN}"
+
+
+#
+# Start of Job, set Timestamp only.
+#
+if [ "$2" == "START" ] ; then
+    echo "`date +%s`" > ${TS}
+    exit 0
+fi
+
+
+#
+# Calculate the Backup Duration.
+#
+if [ -e "${TS}" ] ; then
+    NOW="`date +%s`"
+    THEN="`cat ${TS}`"
+    let "PASSED = ($NOW-$THEN)/60"
+else
+    PASSED="unknown"
+fi
+
+
+#
+# "Help"
+#
+if [ "$1" == "--help" ] ; then
+    echo "       [fqdn] unstick - unsticks nagios alert."
+    echo "       --help         - shows this help."
+    exit 0
+fi
+
+
+#
+# Clear Monitoring
+#
+if [ "$2" == "unstick" ] ; then
+    /bin/echo "${HN};bareos:_last_backup;0;Manually cleared @ `date +%H:%M:%S`" | /usr/sbin/send_nsca -H <%= scope.lookupvar('::al_bareos::monitoring_server')%> -c /etc/nagios/send_nsca.cfg -d ';' >/dev/null
+    /bin/echo "${HN};bareos:_full_backup;0;Manually cleared @ `date +%H:%M:%S`" | /usr/sbin/send_nsca -H <%= scope.lookupvar('::al_bareos::monitoring_server')%> -c /etc/nagios/send_nsca.cfg -d ';' >/dev/null
+    exit 0
+fi
+
+
+#
+# Last Full Backup Check
+#
+LastFull="`/usr/bin/php /etc/bacula/bin/getLastFull.php ${HN}`"
+if [ "${LastFull}" == "OK" ] ; then
+        /bin/echo "${HN};bacula:_full_backup;0;full backup OK." | /usr/sbin/send_nsca -H <%= scope.lookupvar('::pn_bacula::monitoring_server')%> -c /etc/nagios/send_nsca.cfg -d ';' >/dev/null
+else
+        /bin/echo "${HN};bacula:_full_backup;2;No full backup within 30 days found!" | /usr/sbin/send_nsca -H <%= scope.lookupvar('::pn_bacula::monitoring_server')%> -c /etc/nagios/send_nsca.cfg -d ';' >/dev/null
+fi
+
 
 if [ "${EXIT}" == "OK" ] ; then
     /bin/echo "${HN};bareos: backup;0;Backup completed (`date +%H:%M:%S`)" | /usr/sbin/send_nsca -H <%= scope.lookupvar('::icinga::client::monitoring_server')%> -c <%= scope.lookupvar('::icinga::client::send_nsca_config')%> -d ';'
 else
     /bin/echo "${HN};bareos: backup;2;Backup failed @ `date +%H:%M:%S` with ${EXIT}!" | /usr/sbin/send_nsca -H <%= scope.lookupvar('::icinga::client::monitoring_server')%> -c <%= scope.lookupvar('::icinga::client::send_nsca_config')%> -d ';'
 fi
+
+
+#
+# Remove the TimeStamp.
+#
+test -e ${TS} && rm ${TS}
