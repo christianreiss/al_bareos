@@ -1,0 +1,7 @@
+---
+# Load the client component.
+classes:
+  - al_bareos::client
+
+# Password to acces the storage. Be sure it matches the servers.
+al_bareos::client::pw_storage: ENC[PKCS7,MIIBuQYJKoZIhvcNAQcDoIIBqjCCAaYCAQAxggEhMIIBHQIBADAFMAACAQEwDQYJKoZIhvcNAQEBBQAEggEARlysIpmllhI3ShBjI/fVIX92f+Pz/zTguNX/74DZTlXwQsokGh70+JOIMzYWkYtg58C+quw+K1kD1CXRJHqLLAOmrQ0grw89JSR3fY5h7Wn75O1fwW5IdlXJ5q8cL927J8q3VloUMwaKUD/h0C3X/kR636qwR18eTcRzUZCS04c/qoT2+CozIbgLxaWn1d6vdLWrlp9mVH5ZWSdSDLPEjUeRvQYIobmc/S3jHE8EpiBoqXkH3xm51N+4oS29h1jI00DERDAaQ6ATNl4chxpl+iIOiWO7+OE34kQo/nh7qukWQC4fCAgm/xdYSJwV5IaLT8p5HeLYaMMX3ilcp9rgojB8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBAGypaE0mHuECVEdikRKgn2gFC4i311+2PXdiyFPsycA4GV/AKev9oGVbKnsLfUpd/eLUVddv4RnCF4IJfd51/ymeqIUmi5Ir7MjPuS07D2ePql2r4eUnntV7RIYM2/XkxycQ==]

@@ -1,0 +1,22 @@
+# This file is managed by
+#  ____  _   _ ____  ____  _____ _____
+# |  _ \| | | |  _ \|  _ \| ____|_   _|
+# | |_) | | | | |_) | |_) |  _|   | |
+# |  __/| |_| |  __/|  __/| |___  | |
+# |_|    \___/|_|   |_|   |_____| |_|
+#
+#      All changes will be overwritten
+
+Console {
+  Name        = "<%=@fqdn%>-webui"
+  Password    = "<%= scope.lookupvar('::al_bareos::server::pw_webui_console')%>"
+  JobACL      = *all*
+  ClientACL   = *all*
+  StorageACL  = *all*
+  ScheduleACL = *all*
+  PoolACL     = *all*
+  FileSetACL  = *all*
+  CatalogACL  = MySQL
+  CommandACL  = status, messages, show, version, run, rerun, cancel, .api, .bvfs_*, list, llist, use, restore, .jobs, .filesets, .clients
+  WhereACL    = *all*
+}

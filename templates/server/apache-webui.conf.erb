@@ -1,0 +1,63 @@
+# This file is managed by
+#  ____  _   _ ____  ____  _____ _____
+# |  _ \| | | |  _ \|  _ \| ____|_   _|
+# | |_) | | | | |_) | |_) |  _|   | |
+# |  __/| |_| |  __/|  __/| |___  | |
+# |_|    \___/|_|   |_|   |_____| |_|
+#
+#      All changes will be overwritten
+
+<Virtualhost *:443>
+  # Main configuration
+  ServerName            <%= scope.lookupvar('::al_bareos::server::webui_vhost')%>
+  DocumentRoot          "/usr/share/bareos-webui/public"
+  Alias /bareos-webui   /usr/share/bareos-webui/public
+  RewriteEngine         on
+  RewriteCond           %{REQUEST_URI} ^/$
+  RewriteRule           (.*) /bareos-webui [R=301]
+
+  # SSL Configuration.
+  SSLEngine             on
+  SSLCertificateFile    /etc/ssl/crts/<%= scope.lookupvar('::al_bareos::server::webui_vhost')%>.crt
+  SSLCertificateKeyFile /etc/ssl/keys/<%= scope.lookupvar('::al_bareos::server::webui_vhost')%>.key
+  SSLVerifyClient       on
+  SSLVerifyDepth        1
+  SSLCACertificateFile  /etc/ssl/cas/alpha-labs.net-ca.crt
+  SSLCARevocationFile   /etc/ssl/cas/alpha-labs.net-ca.crl
+  Header add Strict-Transport-Security "max-age=15768000"
+
+  <Directory /usr/share/bareos-webui/public>
+    Options FollowSymLinks
+    AllowOverride None
+
+    # Apache 2.2
+    <IfModule !mod_authz_core.c>
+      Order deny,allow
+      Allow from all
+    </IfModule>
+  
+    # Apache 2.4
+    <IfModule mod_authz_core.c>
+      <IfModule mod_access_compat.c>
+        Order deny,allow
+      </IfModule>
+        Require all granted
+    </IfModule>
+  
+    <IfModule mod_rewrite.c>
+      RewriteEngine on
+      RewriteBase /bareos-webui
+      RewriteCond %{REQUEST_FILENAME} -s [OR]
+      RewriteCond %{REQUEST_FILENAME} -l [OR]
+      RewriteCond %{REQUEST_FILENAME} -d
+      RewriteRule ^.*$ - [NC,L]
+      RewriteRule ^.*$ index.php [NC,L]
+    </IfModule>
+  
+    <IfModule mod_php5.c>
+      php_flag magic_quotes_gpc off
+      php_flag register_globals off
+    </IfModule>
+
+  </Directory>
+</Virtualhost>

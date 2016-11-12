@@ -1,0 +1,51 @@
+# This file is managed by
+#  ____  _   _ ____  ____  _____ _____
+# |  _ \| | | |  _ \|  _ \| ____|_   _|
+# | |_) | | | | |_) | |_) |  _|   | |
+# |  __/| |_| |  __/|  __/| |___  | |
+# |_|    \___/|_|   |_|   |_____| |_|
+#
+#      All changes will be overwritten
+
+
+# Main Storage Configuration
+########################################################################
+Storage {
+  Name                    = "<%=@fqdn%>-sd"
+  SDPort                  = 9103
+  Maximum Concurrent Jobs = 10
+}
+
+# List of allowed Directors
+########################################################################
+Director {
+  Name     = "<%=@fqdn%>-dir"
+  Password = "<%= scope.lookupvar('::al_bareos::server::pw_storage') %>"
+}
+
+# Storage, Inc.
+########################################################################
+Device {
+  Name                        = Storage
+  Media Type                  = File
+  Archive Device              = "<%= scope.lookupvar('::al_bareos::server::storagepath') %>"
+  LabelMedia                  = yes;
+  Random Access               = Yes;
+  AutomaticMount              = yes;
+  RemovableMedia              = no;
+  AlwaysOpen                  = no;
+  Maximum Network Buffer Size = "65536"
+}
+
+# Message Routing
+########################################################################
+Messages {
+  Name     = Standard
+  director = <%=@fqdn%>-dir = all
+}
+
+# Load the dynamic pools
+########################################################################
+@|"sh -c 'for f in /etc/bareos/devices.d/*.conf ; do echo @${f} ; done'"
+@/etc/bareos/rinux.net/rinux-device.conf
+

@@ -1,0 +1,51 @@
+# This file is managed by
+#  ____  _   _ ____  ____  _____ _____
+# |  _ \| | | |  _ \|  _ \| ____|_   _|
+# | |_) | | | | |_) | |_) |  _|   | |
+# |  __/| |_| |  __/|  __/| |___  | |
+# |_|    \___/|_|   |_|   |_____| |_|
+# 
+#      All changes will be overwritten
+
+Pool {
+  Name                  = <%=@fqdn%>-hourly
+  Action On Purge       = Truncate
+  AutoPrune             = yes 
+  Catalog Files         = yes 
+  Label Format          = <%=@hostname%>-hourly-
+  Maximum Volume Jobs   = 1 
+  Maximum Volumes       = 30
+  Pool Type             = Backup
+  Recycle               = yes
+  Recycle Oldest Volume = yes
+  Volume Retention      = 1 days
+}
+
+Pool {
+  Name                  = <%=@fqdn%>-daily
+  Action On Purge       = Truncate
+  AutoPrune             = yes 
+  Catalog Files         = yes 
+  Label Format          = <%=@hostname%>-daily-
+  Maximum Volume Jobs   = 1 
+  Maximum Volumes       = 35
+  Pool Type             = Backup
+  Recycle               = yes
+  Recycle Oldest Volume = yes
+  Volume Retention      = 31 days
+}
+
+Pool {
+  Name                  = <%=@fqdn%>-monthly
+  Action On Purge       = Truncate
+  AutoPrune             = yes 
+  Catalog Files         = yes 
+  Label Format          = <%=@hostname%>-monthly-
+  Maximum Volume Jobs   = 1 
+  Maximum Volumes       = 5
+  Pool Type             = Backup
+  Recycle               = yes
+  Recycle Oldest Volume = yes
+  Volume Retention      = 90 days
+}
+

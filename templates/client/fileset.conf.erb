@@ -1,0 +1,48 @@
+# This file is managed by
+#  ____  _   _ ____  ____  _____ _____
+# |  _ \| | | |  _ \|  _ \| ____|_   _|
+# | |_) | | | | |_) | |_) |  _|   | |
+# |  __/| |_| |  __/|  __/| |___  | |
+# |_|    \___/|_|   |_|   |_____| |_|
+#
+#      All changes will be overwritten
+
+FileSet {
+  Name = "<%=@fqdn%>"
+  Ignore Fileset Changes = yes
+
+  Include {
+    Options {
+      signature = SHA1
+      sparse    = yes
+      onefs     = <%= scope.lookupvar('::al_bareos::client::onefs') %>
+    }
+    File = /
+<% if @include != "unset" %><% @include.each do |incl| -%>
+    File = "<%= incl %>"
+<% end -%><% end -%>
+  }
+
+  Exclude {
+    File = "/bareos-restores"
+    File = "/dev"
+    File = "/lost+found"
+    File = "/media"
+    File = "/opt/puppetlabs/puppet/cache"
+    File = "/proc"
+    File = "/run"
+    File = "/swapfile"
+    File = "/sys"
+    File = "/tmp"
+    File = "/var/cache"
+    File = "/var/lib/mysql"
+    File = "/var/log"
+    File = "/var/mail"
+    File = "/var/tmp"
+<% if @exclude != "unset" %><% @exclude.each do |excl| -%>
+    File = "<%= excl %>"
+<% end -%><% end -%>
+  }
+
+}
+

@@ -1,0 +1,7 @@
+[bareos_bareos-15.2]
+name=Backup Archiving Recovery Open Sourced 15.2 (CentOS_5)
+type=rpm-md
+baseurl=http://download.bareos.org/bareos/release/15.2/CentOS_5/
+gpgcheck=1
+gpgkey=http://download.bareos.org/bareos/release/15.2/CentOS_5/repodata/repomd.xml.key
+enabled=1

@@ -1,0 +1,15 @@
+{
+  "name": "creiss/al_bareos",
+  "version": "0.1.0",
+  "author": "christianreiss",
+  "summary": "Puppet Module for Bareos",
+  "license": "GPLv2",
+  "source": "https://github.com/christianreiss/al_bareos",
+  "project_page": "https://github.com/christianreiss/al_bareos",
+  "issues_url": "https://github.com/christianreiss/al_bareos/issues",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ],
+  "data_provider": null
+}
+

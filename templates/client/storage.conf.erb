@@ -1,0 +1,19 @@
+# This file is managed by
+#  ____  _   _ ____  ____  _____ _____
+# |  _ \| | | |  _ \|  _ \| ____|_   _|
+# | |_) | | | | |_) | |_) |  _|   | |
+# |  __/| |_| |  __/|  __/| |___  | |
+# |_|    \___/|_|   |_|   |_____| |_|
+#
+#      All changes will be overwritten
+
+Storage {
+  Address                 = <%= scope.lookupvar('::al_bareos::client::sd_ip') %>
+  Device                  = storage-<%=@fqdn%>
+  Media Type              = File
+  Name                    = storage-<%=@fqdn%>
+  Password                = "<%= scope.lookupvar('::al_bareos::client::pw_storage') %>"
+  SDPort                  = 9103
+  maximum concurrent jobs = 5
+}
+
