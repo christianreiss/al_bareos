@@ -75,9 +75,9 @@ fi
 #
 # Last Full Backup Check
 #
-LastFull="`/usr/bin/php /etc/bareos/bin/getLastFull.php ${HN}`"
+LastFull="$(/usr/bin/php /etc/bareos/bin/getLastFull.php ${HN})"
 if [ "${LastFull}" == "OK" ] ; then
-        /bin/echo "${HN};bareos: full backup;0;full backup OK." | /usr/sbin/send_nsca -H ${MONITORING_SERVER}-c ${NRPE_CONFIG} -d ';' >/dev/null
+        /bin/echo "${HN};bareos: full backup;0;full backup OK." | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';' >/dev/null
 else
         /bin/echo "${HN};bareos: full backup;2;No full backup within 30 days found!" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c ${NRPE_CONFIG} -d ';' >/dev/null
 fi
