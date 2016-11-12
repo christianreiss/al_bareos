@@ -26,6 +26,9 @@ JOBID="$3"
 # TimeStamp Logfile
 TS="/tmp/${HN}"
 
+# Monitoring Server to send results to
+MONITORING_SERVER="<%= scope.lookupvar('::al_bareos::client::monitoring_server')%>"
+
 
 #
 # Start of Job, set Timestamp only.
@@ -62,8 +65,8 @@ fi
 # Clear Monitoring
 #
 if [ "$2" == "unstick" ] ; then
-    /bin/echo "${HN};bareos:_last_backup;0;Manually cleared @ `date +%H:%M:%S`" | /usr/sbin/send_nsca -H <%= scope.lookupvar('::al_bareos::monitoring_server')%> -c /etc/nagios/send_nsca.cfg -d ';' >/dev/null
-    /bin/echo "${HN};bareos:_full_backup;0;Manually cleared @ `date +%H:%M:%S`" | /usr/sbin/send_nsca -H <%= scope.lookupvar('::al_bareos::monitoring_server')%> -c /etc/nagios/send_nsca.cfg -d ';' >/dev/null
+    /bin/echo "${HN};bareos:_last_backup;0;Manually cleared @ `date +%H:%M:%S`" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c <%= scope.lookupvar('::icinga::client::send_nsca_config')%> -d ';' >/dev/null
+    /bin/echo "${HN};bareos:_full_backup;0;Manually cleared @ `date +%H:%M:%S`" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c <%= scope.lookupvar('::icinga::client::send_nsca_config')%> -d ';' >/dev/null
     exit 0
 fi
 
@@ -73,16 +76,16 @@ fi
 #
 LastFull="`/usr/bin/php /etc/bacula/bin/getLastFull.php ${HN}`"
 if [ "${LastFull}" == "OK" ] ; then
-        /bin/echo "${HN};bareos: full backup;0;full backup OK." | /usr/sbin/send_nsca -H <%= scope.lookupvar('::al_bareos::monitoring_server')%> -c /etc/nagios/send_nsca.cfg -d ';' >/dev/null
+        /bin/echo "${HN};bareos: full backup;0;full backup OK." | /usr/sbin/send_nsca -H ${MONITORING_SERVER}-c <%= scope.lookupvar('::icinga::client::send_nsca_config')%> -d ';' >/dev/null
 else
-        /bin/echo "${HN};bareos: full backup;2;No full backup within 30 days found!" | /usr/sbin/send_nsca -H <%= scope.lookupvar('::al_bareos::monitoring_server')%> -c /etc/nagios/send_nsca.cfg -d ';' >/dev/null
+        /bin/echo "${HN};bareos: full backup;2;No full backup within 30 days found!" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c <%= scope.lookupvar('::icinga::client::send_nsca_config')%> -d ';' >/dev/null
 fi
 
 
 if [ "${EXIT}" == "OK" ] ; then
-    /bin/echo "${HN};bareos: backup;0;Backup completed (`date +%H:%M:%S`)" | /usr/sbin/send_nsca -H <%= scope.lookupvar('::al_bareos::monitoring_server')%> -c <%= scope.lookupvar('::icinga::client::send_nsca_config')%> -d ';'
+    /bin/echo "${HN};bareos: backup;0;Backup completed (`date +%H:%M:%S`)" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c <%= scope.lookupvar('::icinga::client::send_nsca_config')%> -d ';'
 else
-    /bin/echo "${HN};bareos: backup;2;Backup failed @ `date +%H:%M:%S` with ${EXIT}!" | /usr/sbin/send_nsca -H <%= scope.lookupvar('::al_bareos::monitoring_server')%> -c <%= scope.lookupvar('::icinga::client::send_nsca_config')%> -d ';'
+    /bin/echo "${HN};bareos: backup;2;Backup failed @ `date +%H:%M:%S` with ${EXIT}!" | /usr/sbin/send_nsca -H ${MONITORING_SERVER} -c <%= scope.lookupvar('::icinga::client::send_nsca_config')%> -d ';'
 fi
 
 
