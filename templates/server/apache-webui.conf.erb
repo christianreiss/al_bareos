@@ -18,8 +18,8 @@
 
   # SSL Configuration.
   SSLEngine             on
-  SSLCertificateFile    /etc/ssl/crts/<%= scope.lookupvar('::al_bareos::server::webui_vhost')%>.crt
-  SSLCertificateKeyFile /etc/ssl/keys/<%= scope.lookupvar('::al_bareos::server::webui_vhost')%>.key
+  SSLCertificateFile    <%= scope.lookupvar('::al_bareos::server::sslpath')%>/<%= scope.lookupvar('::al_bareos::server::webui_vhost')%>.crt
+  SSLCertificateKeyFile <%= scope.lookupvar('::al_bareos::server::sslpath')%>/<%= scope.lookupvar('::al_bareos::server::webui_vhost')%>.key
   SSLVerifyClient       on
   SSLVerifyDepth        1
   SSLCACertificateFile  /etc/ssl/cas/alpha-labs.net-ca.crt
@@ -35,7 +35,7 @@
       Order deny,allow
       Allow from all
     </IfModule>
-  
+
     # Apache 2.4
     <IfModule mod_authz_core.c>
       <IfModule mod_access_compat.c>
@@ -43,7 +43,7 @@
       </IfModule>
         Require all granted
     </IfModule>
-  
+
     <IfModule mod_rewrite.c>
       RewriteEngine on
       RewriteBase /bareos-webui
@@ -53,7 +53,7 @@
       RewriteRule ^.*$ - [NC,L]
       RewriteRule ^.*$ index.php [NC,L]
     </IfModule>
-  
+
     <IfModule mod_php5.c>
       php_flag magic_quotes_gpc off
       php_flag register_globals off

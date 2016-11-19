@@ -30,6 +30,7 @@
 # $webui_vhost      = vhost for th web-interface, defaults to fqdn
 # $monitoring  = (bool) If nagios monitoring should be exported.
 # $monitoring_server = (fqdn) of your monitoring server to send nsca events too.
+# $sslpath          = directory where you apache certificates/ keys reside.
 #
 #
 # Examples
@@ -78,6 +79,7 @@ class al_bareos::server (
   $webui_vhost       = $::fqdn,
   $monitoring        = true,
   $monitoring_server = $icinga::client::server_ip,
+  $sslpath           = '/etc/ssl',
 
 ) inherits al_bareos::server::params {
 
