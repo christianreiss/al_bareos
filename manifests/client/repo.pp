@@ -5,7 +5,12 @@ class al_bareos::client::repo(){
 #
   if ( $::al_bareos::client::enable ) {
     case ( $::operatingsystem ) {
-      /(CentOS|XenServer|CloudLinux|RedHat)/: {
+      /(CentOS|CloudLinux|RedHat)/: {
+
+        yumrepo { 'bareos_bareos-15.2':
+          ensure => absent,
+        }
+
         yumrepo { 'bareos':
           ensure   => present,
           name     => 'bareos',
@@ -14,10 +19,42 @@ class al_bareos::client::repo(){
           gpgcheck => true,
           gpgkey   => "http://download.bareos.org/bareos/release/16.2/CentOS_${::os['release']['major']}/repodata/repomd.xml.key",
         }
+      }
+
+      /(XenServer)/: {
 
         yumrepo { 'bareos_bareos-15.2':
           ensure => absent,
         }
+
+        case ( $::os['release']['major'] ) {
+          /(5|6)/: {
+            yumrepo { 'bareos':
+              ensure   => present,
+              name     => 'bareos',
+              baseurl  => 'http://download.bareos.org/bareos/release/16.2/CentOS_5/',
+              enabled  => true,
+              gpgcheck => true,
+              gpgkey   => 'http://download.bareos.org/bareos/release/16.2/CentOS_5/repodata/repomd.xml.key',
+            }
+          }
+
+          /(7)/: {
+            yumrepo { 'bareos':
+              ensure   => present,
+              name     => 'bareos',
+              baseurl  => 'http://download.bareos.org/bareos/release/16.2/CentOS_7}/',
+              enabled  => true,
+              gpgcheck => true,
+              gpgkey   => 'http://download.bareos.org/bareos/release/16.2/CentOS_7/repodata/repomd.xml.key',
+            }
+          }
+
+          default: {
+            fail ("Unknown XenServer Version ${::os['release']['major']} for bareos.")
+          }
+        }
+
       }
 
 #      'Debian': {
