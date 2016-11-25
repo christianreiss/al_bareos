@@ -14,6 +14,10 @@ class al_bareos::client::repo(){
           gpgcheck => true,
           gpgkey   => "http://download.bareos.org/bareos/release/16.2/CentOS_${::os['release']['major']}/repodata/repomd.xml.key",
         }
+
+        yumrepo { 'bareos_bareos-15.2':
+          ensure => absent,
+        }
       }
 
 #      'Debian': {
