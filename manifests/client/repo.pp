@@ -43,7 +43,7 @@ class al_bareos::client::repo(){
             yumrepo { 'bareos':
               ensure   => present,
               name     => 'bareos',
-              baseurl  => 'http://download.bareos.org/bareos/release/16.2/CentOS_7}/',
+              baseurl  => 'http://download.bareos.org/bareos/release/16.2/CentOS_7/',
               enabled  => true,
               gpgcheck => true,
               gpgkey   => 'http://download.bareos.org/bareos/release/16.2/CentOS_7/repodata/repomd.xml.key',
