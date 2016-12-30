@@ -9,7 +9,7 @@ class al_bareos::client::repo(){
       'Fedora': {
 
         case ( $::os['release']['major'] ) {
-          25: {
+          '25': {
             yumrepo { 'bareos':
               ensure   => present,
               name     => 'bareos',
@@ -20,7 +20,7 @@ class al_bareos::client::repo(){
             }
           }
 
-          24: {
+          '24': {
             yumrepo { 'bareos':
               ensure   => present,
               name     => 'bareos',
