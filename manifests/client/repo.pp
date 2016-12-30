@@ -5,11 +5,36 @@ class al_bareos::client::repo(){
 #
   if ( $::al_bareos::client::enable ) {
     case ( $::operatingsystem ) {
+
+      'Fedora': {
+
+        case ( $::os['release']['major'] ) {
+          25: {
+            yumrepo { 'bareos':
+              ensure   => present,
+              name     => 'bareos',
+              baseurl  => "http://download.bareos.org/bareos/release/16.2/Fedora_24/",
+              enabled  => true,
+              gpgcheck => true,
+              gpgkey   => "http://download.bareos.org/bareos/release/16.2/Fedora_24/repodata/repomd.xml.key",
+            }
+          }
+
+          24: {
+            yumrepo { 'bareos':
+              ensure   => present,
+              name     => 'bareos',
+              baseurl  => "http://download.bareos.org/bareos/release/16.2/Fedora_24/",
+              enabled  => true,
+              gpgcheck => true,
+              gpgkey   => "http://download.bareos.org/bareos/release/16.2/Fedora_24/repodata/repomd.xml.key",
+            }
+          }
+        }
+      }
+
       /(CentOS|CloudLinux|RedHat)/: {
 
-        yumrepo { 'bareos_bareos-15.2':
-          ensure => absent,
-        }
 
         yumrepo { 'bareos':
           ensure   => present,
@@ -23,9 +48,6 @@ class al_bareos::client::repo(){
 
       /(XenServer)/: {
 
-        yumrepo { 'bareos_bareos-15.2':
-          ensure => absent,
-        }
 
         case ( $::os['release']['major'] ) {
           /(5|6)/: {
