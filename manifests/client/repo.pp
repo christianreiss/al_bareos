@@ -30,6 +30,11 @@ class al_bareos::client::repo(){
               gpgkey   => "http://download.bareos.org/bareos/release/16.2/Fedora_24/repodata/repomd.xml.key",
             }
           }
+
+          default: {
+            fail ("Unknown Fedora Version ${::os['release']['major']} for bareos.")
+          }
+
         }
       }
 
