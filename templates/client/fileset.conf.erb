@@ -18,6 +18,7 @@ FileSet {
       onefs     = <%= scope.lookupvar('::al_bareos::client::onefs') %>
     }
     File = /
+    File = /boot
 <% if @include != "unset" %><% @include.each do |incl| -%>
     File = "<%= incl %>"
 <% end -%><% end -%>
