@@ -13,10 +13,11 @@ class al_bareos::client::repo(){
             yumrepo { 'bareos':
               ensure   => present,
               name     => 'bareos',
-              baseurl  => "http://download.bareos.org/bareos/release/16.2/Fedora_24/",
+              descr    => 'bareos',
+              baseurl  => 'http://download.bareos.org/bareos/release/16.2/Fedora_24/',
               enabled  => true,
               gpgcheck => true,
-              gpgkey   => "http://download.bareos.org/bareos/release/16.2/Fedora_24/repodata/repomd.xml.key",
+              gpgkey   => 'http://download.bareos.org/bareos/release/16.2/Fedora_24/repodata/repomd.xml.key',
             }
           }
 
@@ -24,10 +25,11 @@ class al_bareos::client::repo(){
             yumrepo { 'bareos':
               ensure   => present,
               name     => 'bareos',
-              baseurl  => "http://download.bareos.org/bareos/release/16.2/Fedora_24/",
+              descr    => 'bareos',
+              baseurl  => 'http://download.bareos.org/bareos/release/16.2/Fedora_24/',
               enabled  => true,
               gpgcheck => true,
-              gpgkey   => "http://download.bareos.org/bareos/release/16.2/Fedora_24/repodata/repomd.xml.key",
+              gpgkey   => 'http://download.bareos.org/bareos/release/16.2/Fedora_24/repodata/repomd.xml.key',
             }
           }
 
@@ -44,6 +46,7 @@ class al_bareos::client::repo(){
         yumrepo { 'bareos':
           ensure   => present,
           name     => 'bareos',
+          descr    => 'bareos',
           baseurl  => "http://download.bareos.org/bareos/release/16.2/CentOS_${::os['release']['major']}/",
           enabled  => true,
           gpgcheck => true,
@@ -59,6 +62,7 @@ class al_bareos::client::repo(){
             yumrepo { 'bareos':
               ensure   => present,
               name     => 'bareos',
+              descr    => 'bareos',
               baseurl  => 'http://download.bareos.org/bareos/release/16.2/CentOS_5/',
               enabled  => true,
               gpgcheck => true,
@@ -70,6 +74,7 @@ class al_bareos::client::repo(){
             yumrepo { 'bareos':
               ensure   => present,
               name     => 'bareos',
+              descr    => 'bareos',
               baseurl  => 'http://download.bareos.org/bareos/release/16.2/CentOS_7/',
               enabled  => true,
               gpgcheck => true,
