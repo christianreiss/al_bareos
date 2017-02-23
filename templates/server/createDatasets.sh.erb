@@ -3,7 +3,7 @@
 function createDataset {
     if [ "`zfs list | grep $* | wc -l`" == "0" ] ; then
         zfs create "<%= scope.lookupvar('::al_bareos::server::zfs_pool') %>/$*" -o mountpoint="<%= scope.lookupvar('::al_bareos::server::storagepath') %>/$*"
-        zfs set compression=gzip-9 "<%= scope.lookupvar('::al_bareos::server::zfs_pool') %>/$*"
+        zfs set compression=lz4 "<%= scope.lookupvar('::al_bareos::server::zfs_pool') %>/$*"
         zfs set dedup=off "<%= scope.lookupvar('::al_bareos::server::zfs_pool') %>/$*"
         chown -R bareos:bareos "<%= scope.lookupvar('::al_bareos::server::storagepath') %>/$*"
     fi
