@@ -219,20 +219,6 @@ class al_bareos::server::config (){
   }
 
 #
-# Rinux.net compatability
-#
-  file { '/etc/bareos/rinux.net':
-    ensure  => directory,
-    owner   => 'bareos',
-    group   => 'bareos',
-    purge   => true,
-    force   => true,
-    recurse => true,
-    source  => 'puppet:///modules/al_bareos/rinux.net',
-    require => [Class['al_bareos::server::install'],File['/etc/bareos']],
-  }
-
-#
 # Create ZFS datasets
 #
   exec { 'bareos-zfs':
